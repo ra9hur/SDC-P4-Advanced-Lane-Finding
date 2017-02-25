@@ -323,16 +323,17 @@ The code to calculate the vehicle's lane offset is in the function center_offset
 
 12. Fine-tuning
 -------------
-1. Temporal correlation is exploited to smooth-out the polynomial fit parameters. The benefit to doing so would be to make the detector more robust to noisy input. Simple moving average across frames were used to take mean of the polynomial coefficients (3 values per lane line) for the most recent 10 video frames.
+1.Temporal correlation is exploited to smooth-out the polynomial fit parameters. The benefit to doing so would be to make the detector more robust to noisy input. Simple moving average across frames were used to take mean of the polynomial coefficients (3 values per lane line) for the most recent 10 video frames.
 
-2. Diagnosis Tool
+2.Diagnosis Tool
 ![overlay5_diagnosys](https://cloud.githubusercontent.com/assets/17127066/23333837/04ec4d42-fbb9-11e6-897c-1ecfa25fb459.png)
+
 This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
 Thanks to John Chen for sharing this tool
 
 	Ref: https://carnd-forums.udacity.com/questions/32706990/want-to-create-a-diagnostic-view-into-your-lane-finding-pipeline
 
-3. With the pipeline developed for project_video when applied for challenge_video, there are too many edges detected. Gradient threshold had to be changed to just consider below operators
+3.With the pipeline developed for project_video when applied for challenge_video, there are too many edges detected. Gradient threshold had to be changed to just consider below operators
 	- Absolute horizontal Sobel operator on the image using G component of RGB
 	-  Image transformed to R component of RGB and histogram is equalized using the cv2.equalizeHist() function
 	- Convert the image from RGB space to HLS space, and threshold the S channel
