@@ -73,7 +73,7 @@ The following steps were performed for each calibration image:
 
 *1. Have the camera matrix and distortion coefficients been computed correctly and checked on one of the calibration images as a test?*
 
-https://cloud.githubusercontent.com/assets/17127066/23333841/0511cf54-fbb9-11e6-927c-7536673132e6.png
+![undst_checker](https://cloud.githubusercontent.com/assets/17127066/23333841/0511cf54-fbb9-11e6-927c-7536673132e6.png)
 
 **Code / output_images**
 
@@ -96,7 +96,7 @@ We are trying to accurately place the self-driving car in this world. Eventually
 
 Below is the example undistorted image.
 
-https://cloud.githubusercontent.com/assets/17127066/23333840/0500d316-fbb9-11e6-8166-ec4ff55bb13d.jpg
+![undst5](https://cloud.githubusercontent.com/assets/17127066/23333840/0500d316-fbb9-11e6-8166-ec4ff55bb13d.jpg)
 
 **Code / output_images**
 
@@ -134,7 +134,7 @@ The goal is to identify pixels that are likely to be part of the lane lines.
 *3. Has a binary image been created using color transforms, gradients or other methods?*
 Here is the example image, transformed into a binary image by combining the above thresholded binary filters:
 
-https://cloud.githubusercontent.com/assets/17127066/23333836/04e46d52-fbb9-11e6-9341-f3cf22d8cd3b.png
+![grad_compare](https://cloud.githubusercontent.com/assets/17127066/23333836/04e46d52-fbb9-11e6-9341-f3cf22d8cd3b.png)
 
 **Code / output_images**
 
@@ -172,7 +172,7 @@ Doing a bird's-eye view transform is especially helpful for road images because 
 
 Here is the example image, after applying perspective transform:
 
-https://cloud.githubusercontent.com/assets/17127066/23333835/04dd2f24-fbb9-11e6-9ce5-4b29069af5e5.png
+![binary_warp_compare](https://cloud.githubusercontent.com/assets/17127066/23333835/04dd2f24-fbb9-11e6-9ce5-4b29069af5e5.png)
 
 **Code / output_images**
 
@@ -233,7 +233,7 @@ A lot of parameters are tracked through line instances and this becomes handy to
 *5. Have lane line pixels been identified in the rectified image and fit with a polynomial?*
 Below is an illustration of the output of the polynomial fit, for our original example image. 
 
-https://cloud.githubusercontent.com/assets/17127066/23333839/04fa2a84-fbb9-11e6-89fb-2010b5c64618.png
+![polyfit_compare](https://cloud.githubusercontent.com/assets/17127066/23333839/04fa2a84-fbb9-11e6-89fb-2010b5c64618.png)
 
 **Code / output_images**
 
@@ -253,7 +253,7 @@ Given all the above, we can annotate the original image with the lane area, and 
 - Overlay the above annotation on the original image
 - Add text to the original image to display lane curvature and vehicle offset
 
-https://cloud.githubusercontent.com/assets/17127066/23333838/04f4f460-fbb9-11e6-9aca-dd3e2f9beb99.png
+![overlay_compare](https://cloud.githubusercontent.com/assets/17127066/23333838/04f4f460-fbb9-11e6-9aca-dd3e2f9beb99.png)
 
 **Code / output_images**
 
@@ -327,7 +327,7 @@ The code to calculate the vehicle's lane offset is in the function center_offset
 
 2. Diagnosis Tool
 
-https://cloud.githubusercontent.com/assets/17127066/23333837/04ec4d42-fbb9-11e6-897c-1ecfa25fb459.png
+![overlay5_diagnosys](https://cloud.githubusercontent.com/assets/17127066/23333837/04ec4d42-fbb9-11e6-897c-1ecfa25fb459.png)
 
 This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
 Thanks to John Chen for sharing this tool
