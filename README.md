@@ -1,5 +1,4 @@
 # SDC-P4-Advanced-Lane-Finding
-Project deals with complex scenarios like curving lines, shadows and changes in the color of the pavement.
 
 1. Problem Definition - About Project
 -------------
@@ -27,7 +26,7 @@ This project is step1 of the overall implementation
 1. First, the advanced lane-finding (Project 4)
 2. Second, the vehicle detection and tracking (Project 5)
 
-With this, it can be perceived that Udacity is trying to subtly introduce students to syllabus in term 2 (simultaneous localization and mapping – SLAM) using camera sensors.
+With this, it can be perceived that using camera sensors, Udacity is trying to subtly introduce students to syllabus in term 2 (simultaneous localization and mapping – SLAM).
 
 ----------
 
@@ -102,7 +101,7 @@ Below is the example undistorted image.
 
 1. The code to perform distortion correction is in 'undistort.py'. 
 2. Camera calibration matrices in 'calibrate_camera.p' is used to undistort the input image. 
-3. For all images in 'test_images/*.jpg', the undistorted version of that image is saved in 'output_images/undst*.png'.
+3. For all images in 'test_images/{}.jpg', the undistorted version of that image is saved in 'output_images/undst{}.png'.
 
 ----------
 
@@ -132,6 +131,7 @@ The goal is to identify pixels that are likely to be part of the lane lines.
 **Verification**
 
 *3. Has a binary image been created using color transforms, gradients or other methods?*
+
 Here is the example image, transformed into a binary image by combining the above thresholded binary filters:
 
 ![grad_compare](https://cloud.githubusercontent.com/assets/17127066/23333836/04e46d52-fbb9-11e6-9341-f3cf22d8cd3b.png)
@@ -147,10 +147,14 @@ Here is the example image, transformed into a binary image by combining the abov
 6. Perspective transform
 -------------
 To transform an image such that we are effectively viewing objects from a different angle or direction. 
+
 In an image, perspective is the phenomenon where an object appears smaller, the farther away it is from a viewpoint like a camera, and parallel lines appear to converge to a point. 
+
 Considering perspective in the image of the road, the lane looks smaller and smaller, the farther away it gets from the camera, and the background scenery also appears smaller than the trees closer to the camera in the foreground.
+
 A perspective transform uses this information to transform an image.
 It essentially transforms the apparent z coordinate (depth) of the object points, which in turn changes that object's 2D image representation.
+
 A perspective transform warps the image and effectively drags points towards or pushes them away from the camera to change the apparent perspective.
 
 **Why is this step required ?**
@@ -177,7 +181,7 @@ Here is the example image, after applying perspective transform:
 **Code / output_images**
 
 1. The code to perform perspective transform is in 'perspective_transform.py'
-2. For all images in 'test_images/*.jpg', the warped version of that image is saved in 'output_images/binary_warp*.png'.
+2. For all images in 'test_images/{}.jpg', the warped version of that image is saved in 'output_images/binary_warp{}.png'.
 
 ----------
 
@@ -218,19 +222,14 @@ A lot of parameters are tracked through line instances and this becomes handy to
 - In case we don't find enough pixels for the lanes (minpix = 10000), lane lines from the previous frame is retained and the current frame is ignored.
 	- line_detected set to True
 - Pixel outliers within the window margin are identified and then replaced by the median 
-- Check, if bottom X values change drastically from previous frames
-	- Xvals for previous 10 frames are stored in line instances.
-	- Average of previous Xvals is compared with the current value.
-	- Any change < 50 pixels is considered good
-- Tracking changes to vehicle distance from the center
-	- If the offset changes > 0.3m, measurements are considered bad
-- If radius of curvature of lanes < 250m and > 10000 m, measurements are considered bad and lane parameters for the current frame is dropped
+- If radius of curvature of lanes > 10000 m, measurements are considered bad and lane parameters for the current frame is dropped
 - If the ratios of radius of curvature of lanes is > 10, measurement for the current frame is skipped
-- If either left / right lane is not detected for 3 consecutive frames, parameters are reset and polynomials are fit through the initial histogram method.
+- If either left / right lane is not detected for 4 consecutive frames, parameters are reset and polynomials are fit through the initial histogram method.
 
 **Verification**
 
 *5. Have lane line pixels been identified in the rectified image and fit with a polynomial?*
+
 Below is an illustration of the output of the polynomial fit, for our original example image. 
 
 ![polyfit_compare](https://cloud.githubusercontent.com/assets/17127066/23333839/04fa2a84-fbb9-11e6-89fb-2010b5c64618.png)
@@ -238,7 +237,7 @@ Below is an illustration of the output of the polynomial fit, for our original e
 **Code / output_images**
 
 1. The code to perform perspective transform is in 'lanes_overlay.py'
-2. For all images in 'test_images/*.jpg', the polynomial-fit-annotated version of that image is saved in 'output_images/polyfit_*.png'.
+2. For all images in 'test_images/{}.jpg', the polynomial-fit-annotated version of that image is saved in 'output_images/polyfit{}.png'.
 
 
 ----------
@@ -250,7 +249,7 @@ Given all the above, we can annotate the original image with the lane area, and 
 - Create a blank image, and draw our polyfit lines (estimated left and right lane lines)
 - Fill the area between the lines (with green color)
 - Use the inverse warp matrix calculated from the perspective transform, to "unwarp" the above such that it is aligned with the original image's perspective
-- Overlay the above annotation on the original image
+- Overlay lanes on the original image
 - Add text to the original image to display lane curvature and vehicle offset
 
 ![overlay_compare](https://cloud.githubusercontent.com/assets/17127066/23333838/04f4f460-fbb9-11e6-9aca-dd3e2f9beb99.png)
@@ -258,7 +257,7 @@ Given all the above, we can annotate the original image with the lane area, and 
 **Code / output_images**
 
 1. The code to perform the above is in the function overlay() in 'lanes_overlay.py'.
-2. Image with visual display of lane boundary is saved in 'output_images/polyfit_*.png'.
+2. Image with visual display of lane boundary is saved in 'output_images/polyfit{}.png'.
 
 ----------
 
@@ -276,14 +275,16 @@ To determine the curvature, following steps are followed.
 
 **Implementation**
 
-Input: Polynomial fit for the left and right lane lines
-Radius of curvature for each line can be calculated according to formula, ....
-Distance units are converted from pixels to meters, assuming 30 meters per 720 pixels in the vertical direction, and 3.7 meters per 700 pixels in the horizontal direction.
-Average of radius of curvature for the left and right lane lines are taken
+- Input: Polynomial fit for the left and right lane lines
+- Radius of curvature for each line can be calculated according to formula, as explained [here][1]
+- Distance units are converted from pixels to meters, assuming 30 meters per 720 pixels in the vertical direction, and 3.7 meters per 700 pixels in the horizontal direction.
+- Average of radius of curvature for the left and right lane lines are taken
 
 **Verification**
 
 *6. Having identified the lane lines, has the radius of curvature of the road been estimated?*
+
+Radius of curvature is annotated on the original image as shown in section 8
 
 **Code / output_images**
 
@@ -307,6 +308,8 @@ This is measured to understand the current position of vehicle, avoid swaying to
 
 *7. Determine position of the vehicle with respect to center in the lane*
 
+Offset left from the center is annotated on the original image as shown in section 8
+
 **Code / output_images**
 
 The code to calculate the vehicle's lane offset is in the function center_offset() in 'lanes_overlay.py'.
@@ -319,19 +322,18 @@ The code to calculate the vehicle's lane offset is in the function center_offset
 
 *8. Does the pipeline established with the test images work to process the video?*
 
+Please check videos project_output.mp4
+
 ----------
 
 12. Fine-tuning
 -------------
-1.Temporal correlation is exploited to smooth-out the polynomial fit parameters. The benefit to doing so would be to make the detector more robust to noisy input. Simple moving average across frames were used to take mean of the polynomial coefficients (3 values per lane line) for the most recent 10 video frames.
+1.Temporal correlation is exploited to smooth-out the polynomial fit parameters. The benefit to doing so would be to make the detector more robust to noisy input. Simple moving average across frames were used to take median (knowing that median is statistically more reliable compared to mean) of the polynomial coefficients (3 parameters per lane line) for the most recent 10 video frames.
 
 2.Diagnosis Tool
 ![overlay5_diagnosys](https://cloud.githubusercontent.com/assets/17127066/23333837/04ec4d42-fbb9-11e6-897c-1ecfa25fb459.png)
-
-This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
-Thanks to John Chen for sharing this tool
-
-	Ref: https://carnd-forums.udacity.com/questions/32706990/want-to-create-a-diagnostic-view-into-your-lane-finding-pipeline
+	This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
+Thanks to John Chen for sharing this tool [here][2]
 
 3.With the pipeline developed for project_video when applied for challenge_video, there are too many edges detected. Gradient threshold had to be changed to just consider below operators
 	- Absolute horizontal Sobel operator on the image using G component of RGB
@@ -348,3 +350,6 @@ Thanks to John Chen for sharing this tool
 - The developed pipeline fails to work with harder_challenge_video. Need to explore if there is a different way to solve this problem.
 
 ----------
+
+  [1]: http://www.intmath.com/applications-differentiation/8-radius-curvature.php
+  [2]: https://carnd-forums.udacity.com/questions/32706990/want-to-create-a-diagnostic-view-into-your-lane-finding-pipeline
