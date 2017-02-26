@@ -44,7 +44,7 @@ To execute the pipeline on an image and visualize final output, run ‘advlaneli
 
 **To generate video output**
 
-Run python ‘advlanelines.py’. This will take the raw video file 'project_video.mp4', and creates an  output video 'output_video.mp4'. To run the lane detector on arbitrary video files, update corresponding lines of ‘advlanelines.py’.
+Run python ‘advlanelines.py’. This will take the raw video file 'project_video.mp4', and creates an  output video 'project_output.mp4'. To run the lane detector on arbitrary video files, update corresponding lines of ‘advlanelines.py’.
 
 ----------
 
@@ -322,7 +322,7 @@ The code to calculate the vehicle's lane offset is in the function center_offset
 
 *8. Does the pipeline established with the test images work to process the video?*
 
-Please check videos project_output.mp4
+Please check videos project_output.mp4, project_output_diagnose.mp4 (challenge_output.mp4, challenge_output_diagnose.mp4)
 
 ----------
 
@@ -332,7 +332,8 @@ Please check videos project_output.mp4
 
 2.Diagnosis Tool
 ![overlay5_diagnosys](https://cloud.githubusercontent.com/assets/17127066/23333837/04ec4d42-fbb9-11e6-897c-1ecfa25fb459.png)
-	This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
+
+This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
 Thanks to John Chen for sharing this tool [here][2]
 
 3.With the pipeline developed for project_video when applied for challenge_video, there are too many edges detected. Gradient threshold had to be changed to just consider below operators
