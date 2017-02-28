@@ -25,7 +25,8 @@ def abs_sobel_thresh(img, orient='x', sobel_kernel=3, thresh=(0, 255)):
     
     # Apply the following steps to img
     # 1) Convert to grayscale
-    gray = equalize_hist_gray(img[:,:,1])
+    gray = equalize_hist_gray(img[:,:,0])
+    #gray = img[:,:,1]
     
     # 2) Take the derivative in x or y given orient = 'x' or 'y'
     if orient=='x':
@@ -48,8 +49,9 @@ def abs_sobel_thresh(img, orient='x', sobel_kernel=3, thresh=(0, 255)):
 
 
 def gray_thresh(img, thresh=(0, 255)):
-    
-    gray = equalize_hist_gray(img[:,:,0])
+
+    gray = img[:,:,0]
+    gray = equalize_hist_gray(gray)
     
     bin_gray = np.zeros_like(gray)
     bin_gray[(gray>thresh[0]) & (gray<=thresh[1])] = 1    
@@ -105,74 +107,54 @@ def dir_threshold(img, sobel_kernel=3, thresh=(0, np.pi/2)):
     
 def hls_select(img, thresh=(0, 255)):
     # 1) Convert to HLS color space
+
     hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS).astype(np.float32)
     S = hls[:,:,2]
     
     # 2) Apply a threshold to the S channel
     binary_output = np.zeros_like(S)
     binary_output[(S>thresh[0]) & (S<=thresh[1])] = 1
-
+    '''
+    hls = cv2.cvtColor(undst, cv2.COLOR_RGB2HLS).astype(np.float32)
+    hls_yellow = cv2.inRange(hls, (10, 0, 40), (40, 200, 255))
+    '''
     # 3) Return a binary image of threshold result
     return binary_output
-
+    
     
 def perform(undst):
     # Apply Gaussian Smoothing -----------------------------
-    #kernel_size = 3
-    #undst = cv2.GaussianBlur(undst, (kernel_size, kernel_size), 0)
-
-    '''
-    # --------- Thresholds for Project Video
-    # Choose a Sobel kernel size
-    ksize = 5 # Choose a larger odd number to smooth gradient measurements
-    
-    # Apply each of the thresholding functions
-    thresh = (30, 100)
-    thresh_bin = (0.7, 1.3)
-    gradx = abs_sobel_thresh(undst, orient='x', sobel_kernel=ksize, thresh=thresh)
-    grady = abs_sobel_thresh(undst, orient='y', sobel_kernel=ksize, thresh=thresh)
-    grad_gray = gray_thresh(undst, thresh=(250, 255))      # project_video
-    mag_binary = mag_thresh(undst, sobel_kernel=ksize, mag_thresh=thresh)
-    dir_binary = (dir_threshold(undst, sobel_kernel=15, thresh=thresh_bin)).astype(np.float32)
-
-    combined_grad = (np.zeros_like(dir_binary)).astype(np.float32)
-    combined_grad[((gradx == 1) & (grady == 1) | (grad_gray == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1
-
-    hls_binary = hls_select(undst, thresh=(150, 255))      # project_video
-
-    grad_color = np.dstack(( np.zeros_like(combined_grad), combined_grad, hls_binary))
-
-    return grad_color
-    '''
+    kernel_size = 3
+    undst = cv2.GaussianBlur(undst, (kernel_size, kernel_size), 0)
 
 
     # --------- Thresholds for Challenge Video
-    ksize = 5 # Choose a larger odd number to smooth gradient measurements
+    ksize = 3 # Choose a larger odd number to smooth gradient measurements
     
     # Apply each of the thresholding functions
-    thresh = (30, 100)
-    thresh_bin = (0.7, 1.3)
-    gradx = abs_sobel_thresh(undst, orient='x', sobel_kernel=ksize, thresh=thresh)
-    grad_gray = gray_thresh(undst, thresh=(220, 255))
-    dir_binary = (dir_threshold(undst, sobel_kernel=15, thresh=thresh_bin)).astype(np.float32)
+    gradx = abs_sobel_thresh(undst, orient='x', sobel_kernel=ksize, thresh=(35, 100))
+    #grady = abs_sobel_thresh(undst, orient='y', sobel_kernel=ksize, thresh=(100, 150))
+    grad_gray = gray_thresh(undst, thresh=(252, 255))
+    mag_binary = mag_thresh(undst, sobel_kernel=ksize, mag_thresh=(100, 150))
+    #dir_binary = (dir_threshold(undst, sobel_kernel=15, thresh=(0.7, 1.3))).astype(np.float32)
 
     hls_binary = hls_select(undst, thresh=(100, 255))
 
-    cg = (np.zeros_like(dir_binary)).astype(np.float32)
-    cg[((gradx == 1) | (grad_gray == 1))] = 1
+    cg = (np.zeros_like(gradx)).astype(np.float32)
+    cg[((gradx == 1) | (grad_gray == 1)) | ((mag_binary == 1))] = 1
 
-    gc = np.dstack(( np.zeros_like(cg), cg, hls_binary))
+    grad_color = np.dstack(( np.zeros_like(cg), cg, hls_binary))
 
-    return gc
+    return grad_color
 
 # 3. ------------------- Color / Gradient Threshold ---------------------------
 
 if __name__ == "__main__":
 
-    undst = cv2.imread('output_images/undst6.jpg')
+    #undst = cv2.imread('output_images/undst6.jpg')
     #undst = mpimg.imread('output_images/undst1.jpg')
     #undst = mpimg.imread('output_images/undst5.jpg')
-    #undst = mpimg.imread('output_images/undst11.jpg')
+    undst = mpimg.imread('output_images/undst11.jpg')
     #undst = mpimg.imread('output_images/undst12.jpg')
     #undst = mpimg.imread('output_images/undst13.jpg')
     #undst = mpimg.imread('output_images/undst14.jpg')
@@ -187,32 +169,6 @@ if __name__ == "__main__":
     #undst = cv2.GaussianBlur(undst, (kernel_size, kernel_size), 0)
 
     grad_color = perform(undst)
+    plt.imshow(grad_color,'gray')
 
-    '''
-    # Choose a Sobel kernel size
-    ksize = 5 # Choose a larger odd number to smooth gradient measurements
-    
-    # Apply each of the thresholding functions
-    thresh = (30, 100)
-    thresh_bin = (0.7, 1.3)
-    gradx = abs_sobel_thresh(undst, orient='x', sobel_kernel=ksize, thresh=thresh)
-    #grady = abs_sobel_thresh(undst, orient='y', sobel_kernel=ksize, thresh=thresh)
-    #grad_gray = gray_thresh(undst, thresh=(250, 255))      # project_video
-    grad_gray = gray_thresh(undst, thresh=(220, 255))       # challenge_video
-    #mag_binary = mag_thresh(undst, sobel_kernel=ksize, mag_thresh=thresh)
-    dir_binary = (dir_threshold(undst, sobel_kernel=15, thresh=thresh_bin)).astype(np.float32)
-
-    cg = (np.zeros_like(dir_binary)).astype(np.float32)
-    cg[((gradx == 1) | (grad_gray == 1))] = 1
-    #combined_grad = (np.zeros_like(dir_binary)).astype(np.float32)
-    #combined_grad[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1
-    #combined_grad_new = (np.zeros_like(dir_binary)).astype(np.float32)
-    #combined_grad_new[((gradx == 1) & (grady == 1) | (grad_gray == 1)) | ((mag_binary == 1) & (dir_binary == 1))] = 1
-    #hls_binary = hls_select(undst, thresh=(150, 255))      # project_video
-    hls_binary = hls_select(undst, thresh=(100, 255))        # challenge_video
-
-    #gray_hls = np.dstack(( np.zeros_like(grad_gray), grad_gray, hls_binary))
-    gc = np.dstack(( np.zeros_like(cg), cg, hls_binary))
-    #grad_color = np.dstack(( np.zeros_like(combined_grad), combined_grad, hls_binary))
-    #grad_color_new = np.dstack(( np.zeros_like(combined_grad), combined_grad_new, hls_binary))
-    '''
+    mpimg.imsave('output_images/grad_color.jpg',grad_color)

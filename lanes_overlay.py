@@ -92,10 +92,13 @@ def compute_bestfit(left_line,right_line,left_minpix,right_minpix):
     if ((lr/rr > 10.) | (rr/lr > 10.)):
         good_rad = False
 
+    good_lxval = False
+    if (300 < left_line.bestx < 425.):
+        good_lxval = True
 
     m = len(left_line.lastn_fit)
     n = len(right_line.lastn_fit)
-    if ((left_line.radius_of_curvature < 10000.) & (left_minpix) & (good_rad)):
+    if ((200 < left_line.radius_of_curvature < 10000.) & (left_minpix) & (good_rad) & (good_lxval)):
         left_line.detected.pop(0)
         left_line.detected.append(True)
         if (m>10):
@@ -110,7 +113,7 @@ def compute_bestfit(left_line,right_line,left_minpix,right_minpix):
         left_line.detected.append(False)
 
 
-    if ((right_line.radius_of_curvature < 10000.) & (right_minpix) & (good_rad)):
+    if ((200 < right_line.radius_of_curvature < 10000.) & (right_minpix) & (good_rad)):
         right_line.detected.pop(0)
         right_line.detected.append(True)
         if (n>10):

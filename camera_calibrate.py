@@ -110,24 +110,25 @@ def calibration_check(img, nx, ny, mtx, dist):
 
 # 1. ------------------- Calibrate Image --------------------------------------
 
-# Calibrate camera and save camera matrix / distortion coefficients
-stat = calibrate()
-print("Is camera calibrated: ", stat)
+if __name__ == "__main__":
+
+    # Calibrate camera and save camera matrix / distortion coefficients
+    stat = calibrate()
+    print("Camera is calibrated")
+
+    # Read in the saved camera matrix and distortion coefficients
+    # These are the arrays you calculated using cv2.calibrateCamera()
+    dist_pickle = pickle.load( open( "output_images/calibrated_params.p", "rb" ) )
+    mtx = dist_pickle["mtx"]
+    dist = dist_pickle["dist"]
+
+    # Read in an image
+    checker_img = mpimg.imread('test_images/checker_test.jpg')
+    nx = 8 # the number of inside corners in x
+    ny = 6 # the number of inside corners in y
 
 
-# Read in the saved camera matrix and distortion coefficients
-# These are the arrays you calculated using cv2.calibrateCamera()
-dist_pickle = pickle.load( open( "output_images/calibrated_params.p", "rb" ) )
-mtx = dist_pickle["mtx"]
-dist = dist_pickle["dist"]
+    undst_checker, perspective_M = calibration_check(checker_img, nx, ny, mtx, dist)
 
-# Read in an image
-checker_img = mpimg.imread('test_images/checker_test.jpg')
-nx = 8 # the number of inside corners in x
-ny = 6 # the number of inside corners in y
-
-
-undst_checker, perspective_M = calibration_check(checker_img, nx, ny, mtx, dist)
-
-#cv2.imwrite('tested_output/test_undist.jpg',undst_checker)
-mpimg.imsave('output_images/undst_checker.jpg',undst_checker)
+    #cv2.imwrite('tested_output/test_undist.jpg',undst_checker)
+    mpimg.imsave('output_images/undst_checker.jpg',undst_checker)
