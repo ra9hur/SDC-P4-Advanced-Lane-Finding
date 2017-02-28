@@ -32,19 +32,8 @@ With this, it can be perceived that using camera sensors, Udacity is trying to s
 
 2. How to run
 -------------
-**Order of executing files to view image output**
 
-1. camera_calibrate
-2. undistort
-3. color_grad_threshold
-4. perspective_transform
-5. lanes_overlay 	-> 	To be invoked from ‘advlanelines.py’
-
-To execute the pipeline on an image and visualize final output, run ‘advlanelines.py’
-
-**To generate video output**
-
-Run python ‘advlanelines.py’. This will take the raw video file 'project_video.mp4', and creates an  output video 'project_output.mp4'. To run the lane detector on arbitrary video files, update corresponding lines of ‘advlanelines.py’.
+To visualize output of the image pipeline and to generate video output, refer 'advlanelines.ipynb'.
 
 ----------
 
@@ -119,11 +108,9 @@ The goal is to identify pixels that are likely to be part of the lane lines.
 
 - Input -  undst*.png
 - Apply the following filters with thresholding, to create separate "binary images" corresponding to each individual filter
-	- Absolute horizontal Sobel operator on the image using G component of RGB
-	- Absolute vertical Sobel operator on the image using G component of RGB
-	-  Image transformed to R component of RGB and histogram is equalized using the cv2.equalizeHist() function
+	- Absolute horizontal Sobel operator on the image using R component of RGB
+	- Image transformed to R component of RGB and histogram is equalized using the cv2.equalizeHist() function
 	- Sobel operator in both horizontal and vertical directions and calculate its magnitude  using R component of RGB
-	- Sobel operator to calculate the direction of the gradient using R component of RGB
 	- Convert the image from RGB space to HLS space, and threshold the S channel
 - Combine the above binary images to create the final binary gradient and color thresholded image
 - Output -  grad_color*.png
@@ -222,7 +209,8 @@ A lot of parameters are tracked through line instances and this becomes handy to
 - In case we don't find enough pixels for the lanes (minpix = 10000), lane lines from the previous frame is retained and the current frame is ignored.
 	- line_detected set to True
 - Pixel outliers within the window margin are identified and then replaced by the median 
-- If radius of curvature of lanes > 10000 m, measurements are considered bad and lane parameters for the current frame is dropped
+- If Xmax for left line (corresponding to Y = 720.) is < 300 pixels and > 425 pixels, polyfit derived is considered bad and is ignored
+- If radius of curvature of lanes is < 200m and > 10000m, measurements are considered bad and lane parameters for the current frame is dropped
 - If the ratios of radius of curvature of lanes is > 10, measurement for the current frame is skipped
 - If either left / right lane is not detected for 4 consecutive frames, parameters are reset and polynomials are fit through the initial histogram method.
 
@@ -322,7 +310,7 @@ The code to calculate the vehicle's lane offset is in the function center_offset
 
 *8. Does the pipeline established with the test images work to process the video?*
 
-Please check videos project_output.mp4, project_output_diagnose.mp4 (challenge_output.mp4, challenge_output_diagnose.mp4)
+Please check videos project_output.mp4 and challenge_output.mp4
 
 ----------
 
@@ -331,7 +319,6 @@ Please check videos project_output.mp4, project_output_diagnose.mp4 (challenge_o
 1.Temporal correlation is exploited to smooth-out the polynomial fit parameters. The benefit to doing so would be to make the detector more robust to noisy input. Simple moving average across frames were used to take median (knowing that median is statistically more reliable compared to mean) of the polynomial coefficients (3 parameters per lane line) for the most recent 10 video frames.
 
 2.Diagnosis Tool
-![overlay5_diagnosys](https://cloud.githubusercontent.com/assets/17127066/23333837/04ec4d42-fbb9-11e6-897c-1ecfa25fb459.png)
 
 This project involves fine tuning of lot of parameters like color thresholding, gradient thresholding values to obtain the best lane detection. This can be trickier if the pipeline fails for few video frames. To efficiently debug this, a new frame was built that captures multiple stages of the pipeline, like the original image, color/gradient thresholding, region selected and binary_warped frames.
 Thanks to John Chen for sharing this tool [here][2]
