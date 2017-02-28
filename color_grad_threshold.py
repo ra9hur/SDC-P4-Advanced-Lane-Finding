@@ -132,7 +132,7 @@ def perform(undst):
     ksize = 3 # Choose a larger odd number to smooth gradient measurements
     
     # Apply each of the thresholding functions
-    gradx = abs_sobel_thresh(undst, orient='x', sobel_kernel=ksize, thresh=(35, 100))
+    gradx = abs_sobel_thresh(undst, orient='x', sobel_kernel=ksize, thresh=(30, 100))
     #grady = abs_sobel_thresh(undst, orient='y', sobel_kernel=ksize, thresh=(100, 150))
     grad_gray = gray_thresh(undst, thresh=(252, 255))
     mag_binary = mag_thresh(undst, sobel_kernel=ksize, mag_thresh=(100, 150))
