@@ -1,6 +1,7 @@
 # SDC-P4-Advanced-Lane-Finding
 
-1. Problem Definition - About Project
+----------
+**1. Problem Definition - About Project**
 -------------
 In the very first project, we implemented a basic pipeline to find lane lines on the road.
 
@@ -29,15 +30,13 @@ This project is step1 of the overall implementation
 With this, it can be perceived that using camera sensors, Udacity is trying to subtly introduce students to syllabus in term 2 (simultaneous localization and mapping – SLAM).
 
 ----------
-
-2. How to run
+**2. How to run**
 -------------
 
 To visualize output of the image pipeline and to generate video output, refer 'advlanelines.ipynb'.
 
 ----------
-
-3. Camera Calibration
+**3. Camera Calibration**
 -------------
 
 To compute the transformation between 3D object points in the world and 2D image points.
@@ -69,8 +68,7 @@ The following steps were performed for each calibration image:
 2. The final calibration matrices are saved in the pickle file 'calibrated_params.p'
 
 ----------
-
- 4. Distortion Correction
+** 4. Distortion Correction**
 -------------
 To ensure that the geometrical shape of objects is represented consistently, no matter where they appear in an image.
 
@@ -93,8 +91,7 @@ Below is the example undistorted image.
 3. For all images in 'test_images/{}.jpg', the undistorted version of that image is saved in 'output_images/undst{}.png'.
 
 ----------
-
- 5. Thresholded binary image
+** 5. Thresholded binary image**
 -------------
 **Why is this step required ?**
 
@@ -130,8 +127,7 @@ Here is the example image, transformed into a binary image by combining the abov
 
 
 ----------
-
-6. Perspective transform
+**6. Perspective transform**
 -------------
 To transform an image such that we are effectively viewing objects from a different angle or direction. 
 
@@ -171,8 +167,7 @@ Here is the example image, after applying perspective transform:
 2. For all images in 'test_images/{}.jpg', the warped version of that image is saved in 'output_images/binary_warp{}.png'.
 
 ----------
-
-7. Polynomial fit
+**7. Polynomial fit**
 -------------
 **Why is this step required ?**
 
@@ -229,8 +224,7 @@ Below is an illustration of the output of the polynomial fit, for our original e
 
 
 ----------
-
-8. Overlay original image with lane area
+**8. Overlay original image with lane area**
 -------------
 Given all the above, we can annotate the original image with the lane area, and information about the lane curvature and vehicle offset.
 
@@ -248,8 +242,7 @@ Given all the above, we can annotate the original image with the lane area, and 
 2. Image with visual display of lane boundary is saved in 'output_images/polyfit{}.png'.
 
 ----------
-
-9. Radius of curvature
+**9. Radius of curvature**
 -------------
 **Why is this step required ?**
 
@@ -279,8 +272,7 @@ Radius of curvature is annotated on the original image as shown in section 8
 The code to calculate the radius of curvature is in the function curvature() in 'lanes_overlay.py'.
 
 ----------
-
-10. Vehicle offset from lane center
+**10. Vehicle offset from lane center**
 -------------
 **Why is this step required ?**
 
@@ -303,8 +295,7 @@ Offset left from the center is annotated on the original image as shown in secti
 The code to calculate the vehicle's lane offset is in the function center_offset() in 'lanes_overlay.py'.
 
 ----------
-
-11. Pipeline (video)
+**11. Pipeline (video)**
 -------------
 **Verification**
 
@@ -313,8 +304,7 @@ The code to calculate the vehicle's lane offset is in the function center_offset
 Please check videos project_output.mp4 and challenge_output.mp4
 
 ----------
-
-12. Fine-tuning
+**12. Fine-tuning**
 -------------
 1.Temporal correlation is exploited to smooth-out the polynomial fit parameters. The benefit to doing so would be to make the detector more robust to noisy input. Simple moving average across frames were used to take median (knowing that median is statistically more reliable compared to mean) of the polynomial coefficients (3 parameters per lane line) for the most recent 10 video frames.
 
@@ -329,8 +319,7 @@ Thanks to John Chen for sharing this tool [here][2]
 	- Convert the image from RGB space to HLS space, and threshold the S channel
 
 ----------
-
-13. Further Improvements 
+**13. Further Improvements **
 ------------- 
 
 - The project involves processing and extracting features manually. The process is too time-consuming. Also, it is always possible that the pipe-line tuned for certain conditions may not work in other situations. Would like to explore if this project can be implemented through deep-learning.
