@@ -68,7 +68,7 @@ The following steps were performed for each calibration image:
 2. The final calibration matrices are saved in the pickle file 'calibrated_params.p'
 
 ----------
-** 4. Distortion Correction**
+**4. Distortion Correction**
 -------------
 To ensure that the geometrical shape of objects is represented consistently, no matter where they appear in an image.
 
@@ -91,7 +91,7 @@ Below is the example undistorted image.
 3. For all images in 'test_images/{}.jpg', the undistorted version of that image is saved in 'output_images/undst{}.png'.
 
 ----------
-** 5. Thresholded binary image**
+**5. Thresholded binary image**
 -------------
 **Why is this step required ?**
 
