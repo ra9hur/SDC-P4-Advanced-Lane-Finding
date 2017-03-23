@@ -319,7 +319,7 @@ Thanks to John Chen for sharing this tool [here][2]
 	- Convert the image from RGB space to HLS space, and threshold the S channel
 
 ----------
-**13. Further Improvements **
+**13. Further Improvements**
 ------------- 
 
 - The project involves processing and extracting features manually. The process is too time-consuming. Also, it is always possible that the pipe-line tuned for certain conditions may not work in other situations. Would like to explore if this project can be implemented through deep-learning.
