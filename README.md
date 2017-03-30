@@ -20,8 +20,6 @@ In addition, lane curvatures and vehicle offsets with respect to the center are 
 |8 |Draw the detected lane boundaries back onto the original image. |Draw the detected lane boundaries back onto the original image.
 |9 |Output visual display of the lane boundaries with numerical estimation of lane curvature and vehicle position. |Output visual display of the lane boundaries
 
-Most of the code for this project is leveraged from the lecture notes.
-
 This project is step1 of the overall implementation
 
 1. First, the advanced lane-finding (Project 4)
